@@ -9,5 +9,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Unity-AppSpaceWarp.unity
     guid: 543ca0bb6d5b1e447998eaae74872075
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 5cef906b323d9eb43a100ddc35b717cf, type: 2}
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3b321b1577b44904094d48f273c0e00c, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2cb06edbf8b9d36458f28b3b827093bc, type: 2}

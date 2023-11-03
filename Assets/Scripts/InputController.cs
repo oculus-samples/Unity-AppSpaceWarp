@@ -16,7 +16,6 @@ public class InputController : MonoBehaviour
             OVRManager.SetSpaceWarp(!OVRManager.GetSpaceWarp());
 
         
-        var selectedObject = AssocRaycastSelector.SelectedObject;
         var selectedObjectControls = AssocRaycastSelector?.SelectedObject?.GetComponent<ObjectControls>();
 
         if (selectedObjectControls.AllowTranslationChange && OVRInput.GetDown(OVRInput.RawButton.B, OVRInput.Controller.RTouch))
