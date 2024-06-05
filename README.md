@@ -22,7 +22,7 @@ Then, clone this repo using the "Code" button above, or this command:
 git clone https://github.com/oculus-samples/Unity-AppSpaceWarp.git
 ```
 
-To run the demo, clone this repo and open it in *Unity 2021.3.1f1* or higher. (Note that, due to a [known issue](https://developer.oculus.com/documentation/unity/unity-asw/), this demo will not work in Unity 2021.3.4 or 2021.3.5.) Load the [Assets/Scenes/Unity-AppSpaceWarp](Assets/Scenes/Unity-AppSpaceWarp.unity) scene.
+To run the demo, clone this repo and open it in *Unity 2021.3.261f1* or higher. Load the [Assets/Scenes/OpaqueObjects](Assets/Scenes/OpaqueObjects.unity) scene.
 
 Open the File > Build Settings window, click the "Android" platform in the menu that appears, and click the "Switch Platform" button. After Unity finishes re-importing, click the "Build And Run" button.
 
@@ -30,141 +30,121 @@ Open the File > Build Settings window, click the "Android" platform in the menu 
 
 Let's have a look at the App SpaceWarp demo in action.
 
-The demo scene consists of 4 interactive elements: a baton attached to the left controller, a spinning semi-transparent mesh, a spinning opaque mesh, and a background.
+This project consists of 4 scenes. Each scene is meant to demonstrate a different common source of artifacts caused by App SpaceWarp, and how to best mitigate them.
 
-With your left hand, you can press 'X' to toggle App SpaceWarp. A UI panel next to your left hand shows you the toggle status of App SpaceWarp in the demo, and the demo's current framerate.
+At any point while running the App SpaceWarp demo, you can press the menu button (☰) to open the Scene Select menu. There, you can change scenes, toggle App SpaceWarp, or render batons coming out of your controllers (which allow you to manually test App SpaceWarp interactions).
 
-With your right hand, you can point to any interactive element, and press the following buttons. Note that some of these interactions are disabled on certain objects, if they don't cause an interesting difference in the final render. Note that you can point at the baton in your left hand!
-+ **A**: Toggle whether this object renders motion vectors.
-+ **B**: Toggle the speed at which this object moves.
-+ **Right Trigger**: Toggle whether this object writes to the depth buffer. *(Note this may make the object disappear. Its physics representation still exists, so you can point at where it should be and toggle Z-write again to make it re-appear.)*
-+ **Right Grip**: Toggle whether this object writes to the RGB frame. *(Note this will make the object disappear. Its physics representation still exists, so you can point at where it should be and toggle RGB-write again to make it re-appear.)*
-+ **Right Thumbstick Up**: Toggle the texture for this object. A noisy texture is provided to show ASW artifacts in scenes with high-frequency detail.
-+ **Right Thumbstick Down**: Toggle whether an associated object is enabled. This is only used to toggle a MotionVector-frame-writing version of the transparent object, as transparent objects normally can't write motion vectors.
+The following sections showcase App SpaceWarp-generated artifacts in each scene. We recommend examining these scenes while switching between normal gameplay and motion vector overlay debug-draw, as discussed in [App SpaceWarp developer documentation](https://developer.oculus.com/resources/os-app-spacewarp/#troubleshooting), to get a sense of what is being rendered in the MotionVector pass.
 
-## Common Issues With App SpaceWarp
+## Opaque Objects
 
-*Note: All animations below are presented at half speed, for clearer visibility of artifacts*
-
-### Visually Identifying Spacewarped Objects
+*Note: Unless otherwise mentioned, all following animations are presented at half speed, for clearer visibility*
 
 <div style="margin: auto; width: 60%; padding: 10pt;">
 <table>
 <tr>
 	<td style="border:0px;"><img src="./Media/asw-disabled.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving back and forth, not rendering motion vectors.</i></td>
+	<td style="border:0px;"><i>A scene rendered at full-framerate, without App SpaceWarp.</i></td>
 </tr>
 <tr>
 	<td style="border:0px;"><img src="./Media/asw-enabled.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving back and forth, correctly rendering motion vectors.</i></td>
+	<td style="border:0px;"><i>The same scene rendered at half-framerate, with App SpaceWarp generating in-between frames.</i></td>
 </tr>
 </table>
 </div>
 
-One of the most common issues we at Meta have seen with apps using App SpaceWarp is that some objects in a scene won't render motion vectors correctly. This usually happens because objects are using materials whose shaders haven't been modified to include a "MotionVector" pass. As a result, the App SpaceWarp algorithm thinks these objects aren't moving, and they will stay in the same screen-space location in generated frames. 
+As discussed in [developer documentation](https://developer.oculus.com/resources/os-app-spacewarp/#tech-overview), App SpaceWarp works by using the most recent app-generated frame's eye, motion vector, and depth buffers to generate a new frame. This frame is generated by moving elements from the previous (app-generated) frame, per-pixel, based on the previous frame's motion vectors.
 
-These objects are easy to identify to a trained eye, because they don't appear to move in generated frames (which makes them stutter in motion), and they don't have artifacts around the edges of their movement.
+Once every pixel in the previous frame is moved according to its motion vectors, it is possible there will be "holes" left in the generated frame. These holes generally come from background elements, which were occluded in your app's submitted frame, but are now disoccluded in the App SpaceWarp-generated frame (because the occluding object has moved away). There is no information on how to render the newly-disoccluded pixels.
 
-### Artifacts with fast motion
+App SpaceWarp solves this issue by _stretching nearby background pixels over the holes_. This creates a "shimmer"/"halo" effect around the silhouette of the foreground object whose movement is causing disocclusion. This causes the majority of App SpaceWarp-related artifacts in correct implementations.
+
+By understanding this behavior, you can understand knock-on effects that amplify the appearance of App SpaceWarp-related artifacts:
 
 <div style="margin: auto; width: 60%; padding: 10pt;">
 <table>
 <tr>
-	<td style="border:0px;"><img src="./Media/slow_noisy_bg.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving slowly, with ASW enabled.</i></td>
+	<td style="border:0px;"><img src="./Media/asw-noisy.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>Art styles that contain lots of high-frequency detail cause stretched background pixels to be more noticable.</i></td>
 </tr>
 <tr>
-	<td style="border:0px;"><img src="./Media/fast_noisy_bg.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving quickly, with ASW enabled.</i></td>
+	<td style="border:0px;"><img src="./Media/asw-noisy-fast.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>The faster a foreground object moves, the more pixels get disoccluded per frame, creating more noticable artifacts.</i></td>
+</tr>
+<tr>
+	<td style="border:0px;"><img src="./Media/asw-noisy-surface.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>Objects with more complex silhouettes will disocclude more background pixels as they move, causing artifacts.</i></td>
 </tr>
 </table>
 </div>
 
-App SpaceWarp generates a frame by moving elements from the previous frame, per-pixel, based on the previous frame's motion vectors. This algorithm can create holes in the generated frame, in places where objects have moved away, and nothing has moved to take its place. Generally, the faster an object moves, the greater the hole left behind by it in a generated frame.
+To reduce the visual impact of these artifacts, put caps on object velocity when using App Spacewarp, or turn off motion vectors on objects once they reach a certain velocity. Additionally, consider using art styles that avoid high-frequency detail in textures, or objects with complex silhouettes.
 
-These holes are filled in by the App SpaceWarp algorithm by using the colors and patterns of neighboring pixels, but it cannot perfectly reconstruct the environment where a hole exists, leading to visual artifacts.
+## Railings
 
-To reduce the visual impact of these artifacts, put caps on object velocity when using App Spacewarp, or turn off motion vectors on objects once they reach a certain velocity.
 
-### Artifacts with noisy textures
+This scene showcases a "surprise" artifact that comes with App SpaceWarp. When players move parallel with a long railing / wire, or when it moves towards them, it can appear to "not be moving" while generating artifacts like the ones discussed in [Opaque Objects](#opaque-objects). 
+
+Motion vector debug-view makes it obvious what is happening: although there is no apparent movement, the App SpaceWarp algorithm is still correctly calculating motion vectors, and translating pixels in generated frames to match.
+
+Note that there is no new disocclusion in generated frames in this scene. The artifacts here are not a result of hole-filling. Rather, they are a result of the motion vector buffer being smaller than the RGB eye buffer, causing motion to "blur" at discontinuities.
 
 <div style="margin: auto; width: 60%; padding: 10pt;">
 <table>
 <tr>
-	<td style="border:0px;"><img src="./Media/fast_plain_bg.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving against a plain background, with ASW enabled.</i></td>
+	<td style="border:0px;"><img src="./Media/rails-no-asw.png" align="middle" width="300"></td>
+	<td style="border:0px;"><i>Without App SpaceWarp enabled, all frames of this scene of a green rail moving along its longest axis appear like this.</i></td>
 </tr>
 <tr>
-	<td style="border:0px;"><img src="./Media/fast_noisy_bg.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A mesh moving at the same speed against a noisy background, with ASW enabled.</i></td>
+	<td style="border:0px;"><img src="./Media/rails-asw.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>With App SpaceWarp enabled, artifacts will appear along the rail's perimeter, even though it doesn't appear to move.</i></td>
 </tr>
 </table>
 </div>
 
-The hole-filling algorithm used by App SpaceWarp creates less noticable artifacts if the neighboring pixels don't contain high-frequency detail. Apps using a less-detailed art style will be able to use App SpaceWarp with fewer concerns.
+## Transparent Objects
 
-## Difficult Issues With App SpaceWarp
+Application SpaceWarp does not support transparent objects. Its algorithm, which moves the input frame's pixels by an amount sampled from a per-pixel motion vector texture, assumes that each pixel moves in one direction. Transparency breaks that assumption: if a transparent blue object sits in front of a moving yellow object, the human brain expects the "blue part" of the pixel to stay still, and the "yellow part" of the pixel to move.
 
-### Transparent objects in-world
+Of course, many applications use transparency, and Meta allows applications that use both transparency and Application SpaceWarp on the store. This scene shows the artifacts associated with implementations of transparency.
 
 <div style="margin: auto; width: 60%; padding: 10pt;">
 <table>
 <tr>
-	<td style="border:0px;"><img src="./Media/transparent_no_motionvector.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A transparent mesh moving in front of an opaque mesh. Only the opaque mesh writes motion vectors.</i></td>
+	<td style="border:0px;"><img src="./Media/no-asw-transparent.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>An opaque cube moving behind two transparent boxes, with App SpaceWarp disabled. There are no rendering artifacts.</i></td>
 </tr>
 <tr>
-	<td style="border:0px;"><img src="./Media/transparent_with_motionvector.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A transparent mesh moving in front of an opaque mesh. Both meshes write motion vectors.</i></td>
+	<td style="border:0px;"><img src="./Media/asw-transparent-no-mv.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>This transparent box does not render motion vectors. The opaque cube renders correctly, but the transparent object is "pulled" in the direction of motion where the opaque object passes through.</i></td>
+</tr>
+<tr>
+	<td style="border:0px;"><img src="./Media/asw-transparent-mv.gif" align="middle" width="300"></td>
+	<td style="border:0px;"><i>This transparent box renders motion vectors. It renders correctly, but the intersecting part of the opaque object is "pulled" in the direction of its motion. Since the box is unmoving, the intersecting part appears to only move every other frame.</i></td>
 </tr>
 </table>
 </div>
 
-In-world transparent objects, such as windows, are a difficult case for App SpaceWarp. The App SpaceWarp algorithm only allows a given pixel to move in one direction, but the human brain might expect a transparent object and an overlapping opaque object to move in 2 different directions.
+We recommend transparent objects render motion vectors if they're the focus of a user's attention. For instance, a fireball projectile is meant to grab a user's attention, and should render motion vectors. A passive smoke animation is not meant to grab a user's attention, and should not. 
 
-In the case of an opaque object and an overlapping transparent object moving in 2 different directions, you have to decide case-by-case which object is the player's focus, and have that object render motion vectors. The other object will generate artifacts, as the App SpaceWarp-generated frame will push the object in an incorrect direction before the next (app-rendered) frame snaps it back into place.
+## User Interfaces
 
-### Z-write on transparent objects in-world
+By default, Unity renders its user interfaces -- even opaque user interfaces -- in a similar manner to transparent objects. Because of this, when App SpaceWarp is enabled, user interfaces will appear "pulled" in the direction of motion of opaque objects passing behind them, for the reasons discussed in [Transparent Objects](#transparent-objects).
 
-<div style="margin: auto; width: 60%; padding: 10pt;">
-<table>
-<tr>
-	<td style="border:0px;"><img src="./Media/opaque_no_zwrite.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A transparent mesh moving in front of an opaque mesh. Both meshes have ZWrite disabled and do not produce motion vectors. <b>Note:</b> disabling ZWrite using the trigger as set up in this sample will not result in this image, this was done by disabling ZWrite only in the motion vector shader pass.  </i></td>
-</tr>
-<tr>
-	<td style="border:0px;"><img src="./Media/transparent_yes_zwrite.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>A transparent mesh moving in front of an opaque mesh. Both meshes have ZWrite enabled, only the opaque mesh produces motion vectors.</i></td>
-</tr>
-</table>
-</div>
+Since user interfaces are almost always the focus of a user's attention, removing these artifacts is very important. There are two useful methods for removing these artifacts:
 
-ZWrite is a shader setting which controls whether an object renders to the depth buffer for occlusion related calculations. For the purposes of App SpaceWarp ZWrite being enabled is required for motion vectors to be generated, but will only enable motion vectors for opaque objects (the reasons for this are discussed in the <i>Transparent objects in-world</i> section).
-
-In the top image ZWrite is disabled on both objects meaning that neither produces motion vectors and App SpaceWarp is misled into believing that there is no movement, effectively resulting in a 36 fps scene with additional computational overhead. In the second image, ZWrite is enabled on both objects, but since motion vectors are not forcibly enabled on the transparent object it is still not rendering them, causing the same scenario as the first image in <i>Transparent objects in-world</i>. In general there is no benefit to having ZWrite enabled on a transparent object in App SpaceWarp unless you forcibly enable motion vectors.
-
-### Transparent objects out-of-world
-
-<div style="margin: auto; width: 60%; padding: 10pt;">
-<table>
-<tr>
-	<td style="border:0px;"><img src="./Media/ovroverlay_disabled.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>The semi-transparent UI is rendered directly to the eyebuffer, and is affected by motion vectors.</i></td>
-</tr>
-<tr>
-	<td style="border:0px;"><img src="./Media/ovroverlay_enabled.gif" align="middle" width="300"></td>
-	<td style="border:0px;"><i>The semi-transparent UI is rendered to a compositor layer, and is not affected by motion vectors.</i></td>
-</tr>
-</table>
-</div>
-
-Out-of-world transparent objects, such as menus, should not be affected by in-world motion vectors when assembling an App SpaceWarp-generated frame.
-
-By putting UI elements in [Compositor Layers](https://developer.oculus.com/documentation/unity/unity-ovroverlay/), you can separate them entirely from your game frame, so they aren't affected by the App SpaceWarp algorithm. Note that this causes the UI elements to appear to update at half framerate (since their compositor layer isn't updated when assembling the App SpaceWarp-generated frame.)
-
-Another possible implementation for semi-transparent UI in apps with ASW is to have an in-world object, whose bounds match the bounds of your UI elements, which renders motion vectors for your UI (similar to how *Transparent objects in-world* is implemented, above). Compositor layers do add per-frame overhead, so this is a more performant choice.
+1. **Rendering motion vectors for the user interface**. This is the same behavior as discussed in [Transparent Objects](#transparent-objects), but it can be made more difficult, as you will need a 3D object (or multiple overlapping objects) whose bounds match the bounds of the UI.
+2. **Compositor Layers**. Compositor layers are rendered separately from the main scene, and composited in later -- see [documentation](https://developer.oculus.com/resources/os-compositor-layers/). This allows UI to appear more "crisp", and, as a side effect, causes the elements rendered as a compositor layer to not be affected by App SpaceWarp. If your UI is meant to be an overlay on your scene (i.e. subtitles), this is an easy win. However, if your UI is meant to sit within your scene (i.e. controllers appear in front of it), you must render "poke-a-hole" zero-alpha pixels where your UI should appear, and those "poke-a-hole" pixels are affected by App SpaceWarp.
 
 ## Additional Considerations With App SpaceWarp
+
+### Moving objects appearing to stutter
+
+Transparent objects that appear to stutter are an expected behavior, and are discussed in the [Transparent Objects](#transparent-objects) section.
+
+Opaque objects appear to stutter if they are using a material whose shaders haven't been modified to include a MotionVector pass. As a result, the App SpaceWarp algorithm thinks they aren't moving, causing them to generate the same artifacts discussed in the [Transparent Objects](#transparent-objects) section.
+
+By capturing a frame of a scene that reproduces this behavior and analyzing with [RenderDoc](https://developer.oculus.com/downloads/package/renderdoc-oculus), you can see if a given opaque object is rendering during the MotionVector pass as expected.
 
 ### Static objects in ASW-enabled apps
 
