@@ -4,9 +4,9 @@ The App SpaceWarp demo for Unity was built to demonstrate how developers can con
 
 Application SpaceWarp allows developers to generate only every other frame for their application, effectively allowing them to render at half framerate (i.e. 36fps for an app that renders at 72fps). The Oculus OS will then render a generated frame, which considers both per-pixel motion and head movement. This gives developers more time to generate better graphics and simulations in their application.
 
-This codebase is available both as a reference and as a template for ASW-enabled apps. The [Oculus License](LICENSE) applies to the SDK and supporting material. The MIT License applies to only certain, clearly marked documents. If an individual file does not indicate which license it is subject to, then the Oculus License applies.
+This codebase is available both as a reference and as a template for ASW-enabled apps. 
 
-The *Oculus Integration* package is released under the *[Oculus SDK License Agreement](./Assets/Oculus/LICENSE.txt)*.
+The majority of the App SpaceWarp project is licensed under [MIT License](LICENSE), however files from [Text Mesh Pro](http://www.unity3d.com/legal/licenses/Unity_Companion_License) are licensed under their respective licensing terms.
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file for how to help out.
 
