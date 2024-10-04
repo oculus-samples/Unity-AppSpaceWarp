@@ -82,7 +82,6 @@ To reduce the visual impact of these artifacts, put caps on object velocity when
 
 ## Railings
 
-
 This scene showcases a "surprise" artifact that comes with App SpaceWarp. When players move parallel with a long railing / wire, or when it moves towards them, it can appear to "not be moving" while generating artifacts like the ones discussed in [Opaque Objects](#opaque-objects). 
 
 Motion vector debug-view makes it obvious what is happening: although there is no apparent movement, the App SpaceWarp algorithm is still correctly calculating motion vectors, and translating pixels in generated frames to match.
@@ -136,6 +135,15 @@ Since user interfaces are almost always the focus of a user's attention, removin
 1. **Rendering motion vectors for the user interface**. This is the same behavior as discussed in [Transparent Objects](#transparent-objects), but it can be made more difficult, as you will need a 3D object (or multiple overlapping objects) whose bounds match the bounds of the UI.
 2. **Compositor Layers**. Compositor layers are rendered separately from the main scene, and composited in later -- see [documentation](https://developer.oculus.com/resources/os-compositor-layers/). This allows UI to appear more "crisp", and, as a side effect, causes the elements rendered as a compositor layer to not be affected by App SpaceWarp. If your UI is meant to be an overlay on your scene (i.e. subtitles), this is an easy win. However, if your UI is meant to sit within your scene (i.e. controllers appear in front of it), you must render "poke-a-hole" zero-alpha pixels where your UI should appear, and those "poke-a-hole" pixels are affected by App SpaceWarp.
 
+## Custom Shaders
+
+A good App SpaceWarp implementation requires all opaque in-world objects to render motion vectors in a MotionVector pass. While this pass is automatically added into built-in shaders when you use the [Oculus-VR branches of Unity render pipeline packages](https://github.com/Oculus-VR/Unity-Graphics/tree/2021.3/oculus-app-spacewarp/Packages), it is not manually added to custom shaders you may have written for your art style.
+
+This scene showcases two custom shaders with MotionVector passes:
+
+1. A custom shader that uses `#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/OculusMotionVectorCore.hlsl"` to add the default MotionVector pass simply.
+2. A custom shader that modifies the MotionVector pass in order to support additional features (in this case, alpha clipping).
+
 ## Additional Considerations With App SpaceWarp
 
 ### Moving objects appearing to stutter
@@ -156,4 +164,4 @@ This application also enables multiple settings for a better user experience. To
 
 + **Phase Sync**: When enabled, the Quest will time its VBLANK interrupt (when it takes a new frame from your application to display on-screen) to occur at exactly the time it predicts your application will complete a frame. For applications with steady per-frame workloads, this will create on average a half-frame improvement in latency. See [documentation](https://developer.oculus.com/documentation/unity/enable-phase-sync/).
 + **Late Latching**: In many game engine architectures (including the default Unity and Unreal architectures), a frame will be processed on CPU at frame X, and processed on GPU at frame Y>X. If late latching is enabled, the player's transform at the beginning of frame Y will be written into a GPU buffer, allowing the scene to be rendered with that transform instead of the transform sent to GPU at frame X. This causes 1+ frame(s) of lower perceived latency from head movement. See [documentation](https://developer.oculus.com/blog/optimizing-vr-graphics-with-late-latching/).
-+ **Symmetric Projection**: Causes left-eye and right-eye cameras to render with symmetric, translated projection matrices. This improves cacheability of the Quest's tiled rendering system, which generally reduces rendering time. **NOTE**: Due to a current known issue with symmetric projection and App Spacewarp, symmetric projection is disabled at this time.
++ **Symmetric Projection**: Causes left-eye and right-eye cameras to render with symmetric, translated projection matrices. This improves cacheability of the Quest's tiled rendering system, which generally reduces rendering time.
