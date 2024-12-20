@@ -6,20 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/OpaqueObjects.unity
+    path: Assets/AppSpaceWarp/Scenes/OpaqueObjects.unity
     guid: 543ca0bb6d5b1e447998eaae74872075
   - enabled: 1
-    path: Assets/Scenes/Railings.unity
+    path: Assets/AppSpaceWarp/Scenes/Railings.unity
     guid: 8b2b508c4ccabc044a18d9832099097e
   - enabled: 1
-    path: Assets/Scenes/TransparentObjects.unity
+    path: Assets/AppSpaceWarp/Scenes/TransparentObjects.unity
     guid: 5fb5d2fa08a48bf4faccc5a77fc12f1c
   - enabled: 1
-    path: Assets/Scenes/UI.unity
+    path: Assets/AppSpaceWarp/Scenes/UI.unity
     guid: 0f0b446166fa4c644830a89a8f95a73d
   - enabled: 1
-    path: Assets/Scenes/CustomShaders.unity
+    path: Assets/AppSpaceWarp/Scenes/CustomShaders.unity
     guid: 91cba668a07f1ce44a25db9cf4472903
+  - enabled: 1
+    path: Assets/Scenes/Benchmark.unity
+    guid: 394e7ea49ec7d794dbb282c9b1d6a476
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3b321b1577b44904094d48f273c0e00c, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2cb06edbf8b9d36458f28b3b827093bc, type: 2}
