@@ -22,7 +22,7 @@ Then, clone this repo using the "Code" button above, or this command:
 git clone https://github.com/oculus-samples/Unity-AppSpaceWarp.git
 ```
 
-To run the demo, clone this repo and open it in *Unity 2021.3.261f1* or higher. Load the [Assets/Scenes/OpaqueObjects](Assets/Scenes/OpaqueObjects.unity) scene.
+To run the demo, clone this repo and open it in *Unity 2021.3.261f1* or higher. Load the [Assets/AppSpaceWarp/Scenes/OpaqueObjects](Assets/AppSpaceWarp/Scenes/OpaqueObjects.unity) scene.
 
 Open the File > Build Settings window, click the "Android" platform in the menu that appears, and click the "Switch Platform" button. After Unity finishes re-importing, click the "Build And Run" button.
 
