@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/AppSpaceWarp/Scenes/CustomShaders.unity
     guid: 91cba668a07f1ce44a25db9cf4472903
   - enabled: 1
-    path: Assets/Scenes/Benchmark.unity
+    path: Assets/AppSpaceWarp/Scenes/Benchmark.unity
     guid: 394e7ea49ec7d794dbb282c9b1d6a476
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3b321b1577b44904094d48f273c0e00c, type: 2}
