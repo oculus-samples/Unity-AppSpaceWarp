@@ -27,4 +27,5 @@ namespace AppSpaceWarp.UI
             m_assocText.text = string.Format(TextFormat, isASWenabled, (1f / m_aveFrameTime).ToString("F1"), SceneManager.GetActiveScene().name);
         }
     }
-}
+}
+

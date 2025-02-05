@@ -4,7 +4,7 @@ The App SpaceWarp demo for Unity was built to demonstrate how developers can con
 
 Application SpaceWarp allows developers to generate only every other frame for their application, effectively allowing them to render at half framerate (i.e. 36fps for an app that renders at 72fps). The Oculus OS will then render a generated frame, which considers both per-pixel motion and head movement. This gives developers more time to generate better graphics and simulations in their application.
 
-This codebase is available both as a reference and as a template for ASW-enabled apps. 
+This codebase is available both as a reference and as a template for ASW-enabled apps.
 
 The majority of the App SpaceWarp project is licensed under [MIT License](LICENSE), however files from [Text Mesh Pro](http://www.unity3d.com/legal/licenses/Unity_Companion_License) are licensed under their respective licensing terms.
 
@@ -82,7 +82,7 @@ To reduce the visual impact of these artifacts, put caps on object velocity when
 
 ## Railings
 
-This scene showcases a "surprise" artifact that comes with App SpaceWarp. When players move parallel with a long railing / wire, or when it moves towards them, it can appear to "not be moving" while generating artifacts like the ones discussed in [Opaque Objects](#opaque-objects). 
+This scene showcases a "surprise" artifact that comes with App SpaceWarp. When players move parallel with a long railing / wire, or when it moves towards them, it can appear to "not be moving" while generating artifacts like the ones discussed in [Opaque Objects](#opaque-objects).
 
 Motion vector debug-view makes it obvious what is happening: although there is no apparent movement, the App SpaceWarp algorithm is still correctly calculating motion vectors, and translating pixels in generated frames to match.
 
@@ -124,7 +124,7 @@ Of course, many applications use transparency, and Meta allows applications that
 </table>
 </div>
 
-We recommend transparent objects render motion vectors if they're the focus of a user's attention. For instance, a fireball projectile is meant to grab a user's attention, and should render motion vectors. A passive smoke animation is not meant to grab a user's attention, and should not. 
+We recommend transparent objects render motion vectors if they're the focus of a user's attention. For instance, a fireball projectile is meant to grab a user's attention, and should render motion vectors. A passive smoke animation is not meant to grab a user's attention, and should not.
 
 ## User Interfaces
 
