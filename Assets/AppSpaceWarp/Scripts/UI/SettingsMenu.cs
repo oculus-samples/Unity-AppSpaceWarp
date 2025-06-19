@@ -1,4 +1,5 @@
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,7 +62,15 @@ namespace AppSpaceWarp.UI
 
         public void SetASWEnabled(bool val)
         {
+#if USING_OPENXR
+            string openXrVersion = UnityEngine.XR.OpenXR.OpenXRRuntime.pluginVersion;
+            if (int.Parse(openXrVersion.Split(".")[1]) >= 11) // AppSW requires OpenXR plugin >= 1.11.0
+            {
+#endif
             OVRManager.SetSpaceWarp(val);
+#if USING_OPENXR
+            }
+#endif
         }
 
         public void SetBatonsEnabled(bool val)
