@@ -1,14 +1,14 @@
 {
   "dependencies": {
     "com.meta.xr.sdk.core": {
-      "version": "72.0.0",
+      "version": "78.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction": {
-      "version": "72.0.0",
+      "version": "77.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -18,26 +18,36 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction.ovr": {
-      "version": "72.0.0",
+      "version": "77.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "72.0.0",
-        "com.meta.xr.sdk.interaction": "72.0.0"
+        "com.meta.xr.sdk.core": "77.0.0",
+        "com.meta.xr.sdk.interaction": "77.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.ai.navigation": {
+      "version": "1.1.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.2",
+      "version": "1.8.17",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.mathematics": "1.2.1"
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.0.7",
+      "version": "2.4.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -74,44 +84,54 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.render-pipelines.core#2021.3/oculus-app-spacewarp",
+      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.render-pipelines.core#2022.3/14.0.10-oculus-app-spacewarp",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.terrain": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
-      "hash": "abf8d3fc49b039bc8b39713a8b1517ed02c95886"
+      "hash": "c16d2573aac3d304040c76e6feb7b41c8717f435"
     },
     "com.unity.render-pipelines.universal": {
-      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.render-pipelines.universal#2021.3/oculus-app-spacewarp",
+      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.render-pipelines.universal#2022.3/14.0.10-oculus-app-spacewarp",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
-        "com.unity.burst": "1.8.2",
-        "com.unity.render-pipelines.core": "12.1.9",
-        "com.unity.shadergraph": "12.1.9"
+        "com.unity.burst": "1.8.9",
+        "com.unity.render-pipelines.core": "14.0.10",
+        "com.unity.shadergraph": "14.0.10",
+        "com.unity.render-pipelines.universal-config": "14.0.9"
       },
-      "hash": "abf8d3fc49b039bc8b39713a8b1517ed02c95886"
+      "hash": "142aef11f54fe61a4b1fd91facf7cec20b291e1d"
+    },
+    "com.unity.render-pipelines.universal-config": {
+      "version": "14.0.10",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "14.0.10"
+      }
     },
     "com.unity.searcher": {
-      "version": "4.9.1",
+      "version": "4.9.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.shadergraph#2021.3/oculus-app-spacewarp",
+      "version": "git+https://github.com/Oculus-VR/Unity-Graphics.git?path=/Packages/com.unity.shadergraph#2022.3/14.0.10-oculus-app-spacewarp",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.render-pipelines.core": "12.1.9",
-        "com.unity.searcher": "4.9.1"
+        "com.unity.render-pipelines.core": "14.0.10",
+        "com.unity.searcher": "4.9.2"
       },
-      "hash": "abf8d3fc49b039bc8b39713a8b1517ed02c95886"
+      "hash": "c16d2573aac3d304040c76e6feb7b41c8717f435"
     },
     "com.unity.sysroot": {
       "version": "2.0.7",
@@ -179,7 +199,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.3.3",
+      "version": "4.4.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -191,11 +211,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.oculus": {
-      "version": "3.3.0",
+      "version": "4.2.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.management": "4.2.0"
+        "com.unity.xr.management": "4.4.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -281,6 +301,12 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
+    "com.unity.modules.terrain": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.modules.tilemap": {
       "version": "1.0.0",
       "depth": 0,
@@ -298,17 +324,6 @@
     "com.unity.modules.uielements": {
       "version": "1.0.0",
       "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
