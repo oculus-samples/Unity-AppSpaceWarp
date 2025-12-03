@@ -23,8 +23,12 @@ Shader "[Oculus Sample] Motion Vectors + Depth"
             #pragma multi_compile _ MOTIONVECTORS_ON
 
             #if MOTIONVECTORS_ON
-                #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/OculusMotionVectorCore.hlsl"
+                #define APPLICATION_SPACE_WARP_MOTION
+                #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ObjectMotionVectors.hlsl"
             #else
+                #pragma vertex vert
+                #pragma fragment frag
+
                 struct Attributes
                 {
                     float4 positionOS : POSITION;
@@ -45,9 +49,6 @@ Shader "[Oculus Sample] Motion Vectors + Depth"
                     return 0;
                 }
             #endif
-
-            #pragma vertex vert
-            #pragma fragment frag
             ENDHLSL
         }
     }
