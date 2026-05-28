@@ -165,3 +165,9 @@ This application also enables multiple settings for a better user experience. To
 + **Phase Sync**: When enabled, the Quest will time its VBLANK interrupt (when it takes a new frame from your application to display on-screen) to occur at exactly the time it predicts your application will complete a frame. For applications with steady per-frame workloads, this will create on average a half-frame improvement in latency. See [documentation](https://developer.oculus.com/documentation/unity/enable-phase-sync/).
 + **Late Latching**: In many game engine architectures (including the default Unity and Unreal architectures), a frame will be processed on CPU at frame X, and processed on GPU at frame Y>X. If late latching is enabled, the player's transform at the beginning of frame Y will be written into a GPU buffer, allowing the scene to be rendered with that transform instead of the transform sent to GPU at frame X. This causes 1+ frame(s) of lower perceived latency from head movement. See [documentation](https://developer.oculus.com/blog/optimizing-vr-graphics-with-late-latching/).
 + **Symmetric Projection**: Causes left-eye and right-eye cameras to render with symmetric, translated projection matrices. This improves cacheability of the Quest's tiled rendering system, which generally reduces rendering time.
+
+## AI coding agents
+
+This repo is wired up for AI coding agents — `AGENTS.md`, `.vscode/extensions.json`, `.mcp.json`, `.cursor/rules/`, and a few client-specific dotfiles surface the **Meta Horizon** VS Code/Cursor extension, the `hzdb` MCP server, and the Meta Quest skill set automatically.
+
+Full toolchain (including Unity skills and per-client install instructions): <https://github.com/meta-quest/agentic-tools>
