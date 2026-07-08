@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01512f11fe5096443ad972feb69271f6, type: 3}
   m_Name: SpaceWarpFeature Android
   m_EditorClassIdentifier: 
-  m_enabled: 0
+  m_enabled: 1
   nameUi: Application SpaceWarp
   version: 1.0.0
   featureIdInternal: com.unity.openxr.feature.spacewarp
@@ -288,7 +288,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
-  m_UseRightHandedNDC: 0
+  m_UseRightHandedNDC: 1
 --- !u!114 &-6154781009651154483
 MonoBehaviour:
   m_ObjectHideFlags: 0
