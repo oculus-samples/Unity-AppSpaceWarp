@@ -62,14 +62,11 @@ namespace AppSpaceWarp.UI
 
         public void SetASWEnabled(bool val)
         {
-#if USING_OPENXR
-            string openXrVersion = UnityEngine.XR.OpenXR.OpenXRRuntime.pluginVersion;
-            if (int.Parse(openXrVersion.Split(".")[1]) >= 11) // AppSW requires OpenXR plugin >= 1.11.0
-            {
-#endif
+#if USING_OPENXR && !UNITY_OPENXR_PLUGIN_1_11_0_OR_NEWER
+            // AppSW requires OpenXR plugin >= 1.11.0.
+            Debug.LogWarning($"AppSW requires OpenXR plugin >= 1.11.0; not enabling SpaceWarp ({val})");
+#else
             OVRManager.SetSpaceWarp(val);
-#if USING_OPENXR
-            }
 #endif
         }
 

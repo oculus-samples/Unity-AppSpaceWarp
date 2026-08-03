@@ -18,6 +18,11 @@
             "name": "com.unity.xr.openxr",
             "expression": "",
             "define": "USING_OPENXR"
+        },
+        {
+            "name": "com.unity.xr.openxr",
+            "expression": "1.11.0",
+            "define": "UNITY_OPENXR_PLUGIN_1_11_0_OR_NEWER"
         }
     ],
     "noEngineReferences": false
